@@ -12,6 +12,9 @@ import ReactMarkdown from "react-markdown";
  */
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
 
+/** Tallest the message box grows (in px) before it scrolls instead. */
+const MAX_INPUT_HEIGHT = 200;
+
 type Message = { role: "user" | "coach"; text: string };
 type Health = "checking" | "online" | "offline";
 
@@ -37,12 +40,18 @@ export default function Home() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // Let the text box grow with what the user types (up to a cap set in CSS).
+  // Let the text box grow with what the user types, up to MAX_INPUT_HEIGHT.
   useEffect(() => {
     const el = inputRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
+    // scrollHeight leaves out the border, so add it back; otherwise the box is
+    // a couple of pixels too short and the browser shows a needless scrollbar.
+    const border = el.offsetHeight - el.clientHeight;
+    const needed = el.scrollHeight + border;
+    el.style.height = `${Math.min(needed, MAX_INPUT_HEIGHT)}px`;
+    // Only allow scrolling once the text is taller than the cap.
+    el.style.overflowY = needed > MAX_INPUT_HEIGHT ? "auto" : "hidden";
   }, [input]);
 
   /** Send the current message to POST /api/chat and append the coach's reply. */
