@@ -1,0 +1,138 @@
+/* Calm, high-contrast palette: dark text on light surfaces, white text only on the deep accent. */
+:root {
+  --bg: #f4f1ec;
+  --surface: #ffffff;
+  --text: #1f2a2e;
+  --muted: #5b6b70;
+  --accent: #2f6b5e;       /* deep green: white text on it passes WCAG AA */
+  --accent-hover: #245448;
+  --coach-bubble: #e7efe9;
+  --border: #d9d4cc;
+  --error-bg: #fdecea;
+  --error-text: #8a1c12;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/* Full-height column: header, scrolling chat, composer pinned at the bottom. */
+.shell {
+  max-width: 760px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.header h1 { margin: 0; font-size: 1.5rem; }
+.subtitle { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #b5b5b5; }
+.status-online .dot { background: #2e9b5f; }
+.status-offline .dot { background: #c0392b; }
+
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty { margin: auto; text-align: center; color: var(--muted); }
+.empty p { margin: 4px 0; }
+.empty p:first-child { font-size: 1.1rem; color: var(--text); }
+.hint { font-size: 0.85rem; }
+
+/* Bubbles size to their content and wrap long text instead of overflowing. */
+.bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.bubble.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+.bubble.coach {
+  align-self: flex-start;
+  background: var(--coach-bubble);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+.typing { color: var(--muted); font-style: italic; }
+
+.error {
+  align-self: stretch;
+  background: var(--error-bg);
+  color: var(--error-text);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+}
+
+.composer { display: flex; gap: 8px; align-items: flex-end; }
+
+/* Grows with the text (height set in page.tsx), capped so it never swallows the screen. */
+.composer textarea {
+  flex: 1;
+  resize: none;
+  max-height: 200px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  outline: none;
+}
+.composer textarea:focus { border-color: var(--accent); }
+
+.composer button {
+  padding: 12px 20px;
+  font: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.composer button:hover:not(:disabled) { background: var(--accent-hover); }
+.composer button:disabled { opacity: 0.5; cursor: not-allowed; }
