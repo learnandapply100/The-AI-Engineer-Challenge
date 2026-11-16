@@ -1,6 +1,9 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+// Renders the coach's Markdown (bold, lists, headings) as real formatting.
+// Raw HTML in replies is ignored by default, so model output can't inject markup.
+import ReactMarkdown from "react-markdown";
 
 /**
  * Base URL of the FastAPI backend.
@@ -110,7 +113,8 @@ export default function Home() {
 
         {messages.map((m, i) => (
           <div key={i} className={`bubble ${m.role}`}>
-            {m.text}
+            {/* Coach replies arrive as Markdown; user messages stay plain text. */}
+            {m.role === "coach" ? <ReactMarkdown>{m.text}</ReactMarkdown> : m.text}
           </div>
         ))}
 

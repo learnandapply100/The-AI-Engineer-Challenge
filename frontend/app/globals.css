@@ -95,6 +95,25 @@ html, body {
   background: var(--coach-bubble);
   color: var(--text);
   border-bottom-left-radius: 4px;
+  /* Markdown builds its own paragraphs and lists, so don't also keep raw line breaks. */
+  white-space: normal;
+}
+
+/* Tidy spacing for formatted replies: no extra gap at the top or bottom of the bubble. */
+.bubble.coach > :first-child { margin-top: 0; }
+.bubble.coach > :last-child { margin-bottom: 0; }
+.bubble.coach p { margin: 0 0 0.75em; }
+.bubble.coach ol,
+.bubble.coach ul { margin: 0 0 0.75em; padding-left: 1.4em; }
+.bubble.coach li { margin-bottom: 0.4em; }
+.bubble.coach h1,
+.bubble.coach h2,
+.bubble.coach h3 { font-size: 1.05rem; margin: 0.75em 0 0.4em; }
+.bubble.coach code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 .typing { color: var(--muted); font-style: italic; }
 
